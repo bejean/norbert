@@ -60,6 +60,17 @@ public class NoRobotClientTest extends TestCase {
         assertFalse( nrc.isUrlAllowed( new URL(base+"view-cvs/") ) );
     }
 
+    public void testGetBaseUrl() throws MalformedURLException, NoRobotException {
+        assertEquals( "http://www.test.com/", NoRobotClient.getBaseURL("http://www.test.com"));
+        assertEquals( "http://www.test.com/", NoRobotClient.getBaseURL("http://www.test.com:80"));
+        assertEquals( "http://www.test.com:81/", NoRobotClient.getBaseURL("http://www.test.com:81"));
+        assertEquals( "https://www.test.com/", NoRobotClient.getBaseURL("https://www.test.com"));
+        assertEquals( "https://www.test.com/", NoRobotClient.getBaseURL("https://www.test.com:443"));
+        assertEquals( "https://www.test.com:403/", NoRobotClient.getBaseURL("https://www.test.com:403"));
+        assertEquals( "ftp://www.test.com/", NoRobotClient.getBaseURL("ftp://www.test.com"));
+        assertEquals( "ftp://www.test.com:21/", NoRobotClient.getBaseURL("ftp://www.test.com:21"));
+    }
+
     // Tests the example given in the RFC
     public void testRfcExampleUnhipbot() throws MalformedURLException, NoRobotException {
         String base = this.hardCode + "rfc/";
