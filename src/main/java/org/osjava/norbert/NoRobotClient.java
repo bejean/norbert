@@ -209,13 +209,22 @@ public class NoRobotClient {
             throw new IllegalStateException("You must call parse before you call this method.  ");
         }
 
-        if( !baseUrl.getHost().equals(url.getHost()) ||
-            baseUrl.getPort() != url.getPort() ||
-            !baseUrl.getProtocol().equals(url.getProtocol()) )
-        {
-            throw new IllegalArgumentException("Illegal to use a different url, " + url.toExternalForm() + 
-                                               ",  for this robots.txt: "+this.baseUrl.toExternalForm());
+        String hostBaseUrl = baseUrl.getHost();
+        if (hostBaseUrl.indexOf(".") == hostBaseUrl.lastIndexOf(".")) {
+            hostBaseUrl = "www." + hostBaseUrl;
         }
+        String hostUrl = url.getHost();
+        if (hostUrl.indexOf(".") == hostUrl.lastIndexOf(".")) {
+            hostUrl = "www." + hostUrl;
+        }       
+        if (!hostBaseUrl.equals(hostUrl) ||
+            baseUrl.getPort() != url.getPort() ||
+            !baseUrl.getProtocol().equals(url.getProtocol())) {
+            return true;
+            //throw new IllegalArgumentException("Illegal to use a different url, " + url.toExternalForm() + 
+            //                                    ",  for this robots.txt: "+this.baseUrl.toExternalForm());
+        }
+
         String urlStr = url.toExternalForm().substring( this.baseUrl.toExternalForm().length() - 1);
         if("/robots.txt".equals(urlStr)) {
             return true;
