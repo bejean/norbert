@@ -123,7 +123,11 @@ public class NoRobotClient {
             while( (line = rdr.readLine()) != null ) {
                 // trim whitespace from either side
                 line = line.trim();
-
+                
+                //change the line's string to new lowercase string
+                //add this line to store the text after exchanging all of the line's text to lowercase.
+                String lineToLowerCase=line.toLowerCase();
+                
                 // ignore startsWith('#')
                 if(line.startsWith("#")) {
                     continue;
@@ -132,8 +136,8 @@ public class NoRobotClient {
                 // if User-agent == userAgent 
                 // record the rest up until end or next User-agent
                 // then quit (? check spec)
-                if(line.startsWith("User-agent:")) {
-
+                if(lineToLowerCase.startsWith("user-agent:")) {
+                    
                     if(parsingAllowBlock) {
                         // we've just finished reading allows/disallows
                         if(engine.isEmpty()) {
@@ -153,19 +157,19 @@ public class NoRobotClient {
                 } else {
                     // if not, then store if we're currently the user agent
                     if(parsingAllowBlock) {
-                        if(line.startsWith("Allow:")) {
+                        if(lineToLowerCase.startsWith("allow:")) {
                             value = line.substring("Allow:".length()).trim();
                             value = URLDecoder.decode(value);
                             engine.allowPath( value );
                         } else 
-                        if(line.startsWith("Disallow:")) {
-                            value = line.substring("Disallow:".length()).trim();
-                            value = URLDecoder.decode(value);
-                            engine.disallowPath( value );
-                        } else {
-                            // ignore
-                            continue;
-                        }
+                            if(lineToLowerCase.startsWith("disallow:")) {
+                                value = line.substring("Disallow:".length()).trim();
+                                value = URLDecoder.decode(value);
+                                engine.disallowPath( value );
+                            } else {
+                                // ignore
+                                continue;
+                            }
                     } else {
                         // ignore
                         continue;
