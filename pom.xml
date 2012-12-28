@@ -7,7 +7,6 @@
 	<name>norbert</name>
 	<packaging>jar</packaging>
 	<!-- Must be kept in sync with "version" value in build.properties -->
-	<version>0.1-SNAPSHOT</version>
 	<url></url>
     <description>A handler for robots.txt, as described in http://www.robotstxt.org/wc/norobots-rfc.html.</description>
   <developers>
