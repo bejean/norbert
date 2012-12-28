@@ -65,7 +65,30 @@ public class NoRobotClient {
         this.userAgent = userAgent;
         existsRobots = false;
     }
+    
+    public static String getBaseURL(String str)
+    {
+        try {
+            URL url = new URL(str);
+            String ret = url.getProtocol() + "://" + url.getHost();
+            
+            if (!"-1".equals(String.valueOf(url.getPort())))                    
+                if (
+                                !(("http".equals(url.getProtocol())) && ("80".equals(String.valueOf(url.getPort()))))
+                                &&
+                                !(("https".equals(url.getProtocol())) && ("443".equals(String.valueOf(url.getPort()))))
 
+                   )
+                {
+                    ret += ":" + url.getPort();
+                }
+            ret += "/";
+            return ret;
+        }
+        catch (Exception e) {}
+        return "";
+    }
+    
     /**
      * Head to a website and suck in their robots.txt file. 
      * Note that the URL passed in is for the website and does 
@@ -76,9 +99,24 @@ public class NoRobotClient {
     public void parse(URL baseUrl) throws NoRobotException {
 
         this.rules = new RulesEngine();
-
-        this.baseUrl = baseUrl;
-
+        
+        if (!"file".equals(baseUrl.getProtocol())) {
+            String strBaseUrl = getBaseURL(baseUrl.toExternalForm());
+            if ("".equals(strBaseUrl))
+                return;
+            
+            try {
+                this.baseUrl = new URL(strBaseUrl);
+            } catch(Exception e) {
+                return;
+            }
+        } else {
+            this.baseUrl = baseUrl;
+        }
+        // if (!baseUrl.equals(this.baseUrl)) {
+        // this.baseUrl = baseUrl;
+        // }
+        
         URL txtUrl = null;
         try {
             // fetch baseUrl+"robots.txt"
@@ -224,8 +262,15 @@ public class NoRobotClient {
             //throw new IllegalArgumentException("Illegal to use a different url, " + url.toExternalForm() + 
             //                                    ",  for this robots.txt: "+this.baseUrl.toExternalForm());
         }
-
-        String urlStr = url.toExternalForm().substring( this.baseUrl.toExternalForm().length() - 1);
+        
+        String urlStr;
+        try
+        {
+            urlStr = url.toExternalForm().substring( this.baseUrl.toExternalForm().length() - 1);
+        }
+        catch(Exception e) {
+            return true;
+        }
         if("/robots.txt".equals(urlStr)) {
             return true;
         }
