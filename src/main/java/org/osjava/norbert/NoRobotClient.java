@@ -66,9 +66,24 @@ public class NoRobotClient {
         existsRobots = false;
     }
     
-    public static String getBaseURL(String str)
+    public static URL getBaseURL(URL baseUrl) {
+        if (!"file".equals(baseUrl.getProtocol())) {
+            String strBaseUrl = rewriteBaseURL(baseUrl.toExternalForm());
+            if ("".equals(strBaseUrl))
+                return null;
+            try {
+                return new URL(strBaseUrl);
+            } catch(Exception e) {
+                return null;
+            }
+        } else {
+            return baseUrl;
+        }
+    }
+    
+    public static String rewriteBaseURL(String str)
     {
-        try {
+        try {            
             URL url = new URL(str);
             String ret = url.getProtocol() + "://" + url.getHost();
             
@@ -99,23 +114,7 @@ public class NoRobotClient {
     public void parse(URL baseUrl) throws NoRobotException {
 
         this.rules = new RulesEngine();
-        
-        if (!"file".equals(baseUrl.getProtocol())) {
-            String strBaseUrl = getBaseURL(baseUrl.toExternalForm());
-            if ("".equals(strBaseUrl))
-                return;
-            
-            try {
-                this.baseUrl = new URL(strBaseUrl);
-            } catch(Exception e) {
-                return;
-            }
-        } else {
-            this.baseUrl = baseUrl;
-        }
-        // if (!baseUrl.equals(this.baseUrl)) {
-        // this.baseUrl = baseUrl;
-        // }
+        //this.baseUrl = getBaseURL(baseUrl);
         
         URL txtUrl = null;
         try {
@@ -136,17 +135,17 @@ public class NoRobotClient {
         }
 
         try {
-            parseText(txt);
+            parseText(baseUrl, txt);
         } catch(NoRobotException nre) {
             throw new NoRobotException("Problem while parsing "+txtUrl, nre);
-        }
-        
-        existsRobots = true;
+        }        
     }
 
-    public void parseText(String txt) throws NoRobotException {
+    public void parseText(URL baseUrl, String txt) throws NoRobotException {
+        this.baseUrl = getBaseURL(baseUrl);
         this.rules = parseTextForUserAgent(txt, this.userAgent);
         this.wildcardRules = parseTextForUserAgent(txt, "*");
+        existsRobots = true;
     }
 
     private RulesEngine parseTextForUserAgent(String txt, String userAgent) throws NoRobotException {

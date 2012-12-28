@@ -61,14 +61,14 @@ public class NoRobotClientTest extends TestCase {
     }
 
     public void testGetBaseUrl() throws MalformedURLException, NoRobotException {
-        assertEquals( "http://www.test.com/", NoRobotClient.getBaseURL("http://www.test.com"));
-        assertEquals( "http://www.test.com/", NoRobotClient.getBaseURL("http://www.test.com:80"));
-        assertEquals( "http://www.test.com:81/", NoRobotClient.getBaseURL("http://www.test.com:81"));
-        assertEquals( "https://www.test.com/", NoRobotClient.getBaseURL("https://www.test.com"));
-        assertEquals( "https://www.test.com/", NoRobotClient.getBaseURL("https://www.test.com:443"));
-        assertEquals( "https://www.test.com:403/", NoRobotClient.getBaseURL("https://www.test.com:403"));
-        assertEquals( "ftp://www.test.com/", NoRobotClient.getBaseURL("ftp://www.test.com"));
-        assertEquals( "ftp://www.test.com:21/", NoRobotClient.getBaseURL("ftp://www.test.com:21"));
+        assertEquals( "http://www.test.com/", NoRobotClient.rewriteBaseURL("http://www.test.com"));
+        assertEquals( "http://www.test.com/", NoRobotClient.rewriteBaseURL("http://www.test.com:80"));
+        assertEquals( "http://www.test.com:81/", NoRobotClient.rewriteBaseURL("http://www.test.com:81"));
+        assertEquals( "https://www.test.com/", NoRobotClient.rewriteBaseURL("https://www.test.com"));
+        assertEquals( "https://www.test.com/", NoRobotClient.rewriteBaseURL("https://www.test.com:443"));
+        assertEquals( "https://www.test.com:403/", NoRobotClient.rewriteBaseURL("https://www.test.com:403"));
+        assertEquals( "ftp://www.test.com/", NoRobotClient.rewriteBaseURL("ftp://www.test.com"));
+        assertEquals( "ftp://www.test.com:21/", NoRobotClient.rewriteBaseURL("ftp://www.test.com:21"));
     }
 
     // Tests the example given in the RFC
