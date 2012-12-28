@@ -54,7 +54,8 @@ public class NoRobotClient {
     private RulesEngine rules;
     private RulesEngine wildcardRules;
     private URL baseUrl;
-
+    private boolean existsRobots;
+    
     /**
      * Create a Client for a particular user-agent name. 
      *
@@ -62,6 +63,7 @@ public class NoRobotClient {
      */
     public NoRobotClient(String userAgent) {
         this.userAgent = userAgent;
+        existsRobots = false;
     }
 
     /**
@@ -92,7 +94,7 @@ public class NoRobotClient {
                 throw new NoRobotException("No content found for: "+txtUrl);
             }
         } catch(IOException ioe) {
-            throw new NoRobotException("Unable to get content for: "+txtUrl, ioe);
+            throw new NoRobotException("Unable to get robots.txt content for: "+txtUrl, ioe);
         }
 
         try {
@@ -100,6 +102,8 @@ public class NoRobotClient {
         } catch(NoRobotException nre) {
             throw new NoRobotException("Problem while parsing "+txtUrl, nre);
         }
+        
+        existsRobots = true;
     }
 
     public void parseText(String txt) throws NoRobotException {
@@ -197,6 +201,10 @@ public class NoRobotClient {
      * @throws IllegalStateException when parse has not been called
      */
     public boolean isUrlAllowed(URL url) throws IllegalStateException, IllegalArgumentException {
+        
+        if (!existsRobots)
+            return true;
+        
         if(rules == null) {
             throw new IllegalStateException("You must call parse before you call this method.  ");
         }
