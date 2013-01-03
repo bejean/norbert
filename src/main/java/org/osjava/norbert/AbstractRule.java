@@ -31,15 +31,20 @@
  */
 package org.osjava.norbert;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Provides implementation for the path property and a handy toString. 
  */
 abstract class AbstractRule implements Rule {
 
     private String path;
+    private boolean wildcardsAllowed;
 
-    public AbstractRule(String path) {
+    public AbstractRule(String path, boolean wildcardsAllowed) {
         this.path = path.trim();
+        this.wildcardsAllowed = wildcardsAllowed;
     }
 
     /**
@@ -54,5 +59,20 @@ abstract class AbstractRule implements Rule {
     public String toString() {
         return getClass().getName() + " on " + this.path;
     }
+    
+    protected boolean match(String query) {
+        if (!wildcardsAllowed || (path.indexOf("*")==-1 && path.indexOf("$")==-1)) return query.startsWith(path);
+        
+        String regExp = path;
+        regExp = regExp.replace("/", "\\/");
+        regExp = regExp.replace("-", "\\-");
+        regExp = regExp.replace(".", "\\.");
+        regExp = regExp.replace("*", ".*");
 
+        Pattern p = Pattern.compile(regExp);
+        Matcher m = p.matcher(query);
+        boolean r = m.find();
+        return r;
+     
+    }
 }

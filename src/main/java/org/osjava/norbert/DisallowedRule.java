@@ -38,21 +38,18 @@ package org.osjava.norbert;
  */
 class DisallowedRule extends AbstractRule {
 
-    public DisallowedRule(String path) {
-        super(path);
+    public DisallowedRule(String path, boolean wildcardsAllowed) {
+        super(path, wildcardsAllowed);
     }
 
     public Boolean isAllowed(String query) {
         if("".equals(super.getPath())) {
             return Boolean.TRUE;
         }
-        boolean test = query.startsWith( super.getPath() );
-        if(!test) {
+        if (!match(query)) {
             return null;
         } else {
             return Boolean.FALSE;
         }
     }
-
-
 }

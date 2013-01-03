@@ -55,6 +55,7 @@ public class NoRobotClient {
     private RulesEngine wildcardRules;
     private URL baseUrl;
     private boolean existsRobots;
+    private boolean wildcardsAllowed;
     
     /**
      * Create a Client for a particular user-agent name. 
@@ -64,6 +65,11 @@ public class NoRobotClient {
     public NoRobotClient(String userAgent) {
         this.userAgent = userAgent;
         existsRobots = false;
+        wildcardsAllowed = false;
+    }
+    
+    public void setWildcardsAllowed(boolean allowed) {
+        wildcardsAllowed = allowed;
     }
     
     public static URL getBaseURL(URL baseUrl) {
@@ -103,7 +109,7 @@ public class NoRobotClient {
         catch (Exception e) {}
         return "";
     }
-    
+        
     /**
      * Head to a website and suck in their robots.txt file. 
      * Note that the URL passed in is for the website and does 
@@ -201,12 +207,12 @@ public class NoRobotClient {
                         if(lineToLowerCase.startsWith("allow:")) {
                             value = line.substring("Allow:".length()).trim();
                             value = URLDecoder.decode(value);
-                            engine.allowPath( value );
+                            engine.allowPath( value, wildcardsAllowed );
                         } else 
                             if(lineToLowerCase.startsWith("disallow:")) {
                                 value = line.substring("Disallow:".length()).trim();
                                 value = URLDecoder.decode(value);
-                                engine.disallowPath( value );
+                                engine.disallowPath( value, wildcardsAllowed );
                             } else {
                                 // ignore
                                 continue;

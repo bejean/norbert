@@ -31,10 +31,7 @@
  */
 package org.osjava.norbert;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 
 import java.io.File;
 import java.net.URL;
@@ -58,6 +55,19 @@ public class NoRobotClientTest extends TestCase {
         nrc.parse( new URL(base) );
         assertTrue( nrc.isUrlAllowed( new URL(base+"index.html") ) );
         assertFalse( nrc.isUrlAllowed( new URL(base+"view-cvs/") ) );
+    }
+
+    public void testAllowedWildcards() throws MalformedURLException, NoRobotException {
+        String base = this.hardCode + "basic/";
+        NoRobotClient nrc = new NoRobotClient("Scabies-1.0");
+        nrc.setWildcardsAllowed(true);
+        nrc.parse( new URL(base) );
+                
+        assertTrue( nrc.isUrlAllowed( new URL(base+"p-asp") ) );
+        assertFalse( nrc.isUrlAllowed( new URL(base+"products/index.html") ) );
+        assertFalse( nrc.isUrlAllowed( new URL(base+"img-products/index.html") ) );
+        assertFalse( nrc.isUrlAllowed( new URL(base+"contact-form/index.html") ) );
+        assertFalse( nrc.isUrlAllowed( new URL(base+"p.asp") ) );
     }
 
     public void testGetBaseUrl() throws MalformedURLException, NoRobotException {

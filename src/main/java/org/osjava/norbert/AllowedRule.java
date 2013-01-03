@@ -38,8 +38,8 @@ package org.osjava.norbert;
  */
 class AllowedRule extends AbstractRule {
 
-    public AllowedRule(String path) {
-        super(path);
+    public AllowedRule(String path, boolean wildcardsAllowed) {
+        super(path, wildcardsAllowed);
     }
 
     public Boolean isAllowed(String query) {
@@ -47,12 +47,10 @@ class AllowedRule extends AbstractRule {
             // What does the spec say here? Until I know, I'll just ignore this.
             return null;
         }
-        boolean test = query.startsWith( super.getPath() );
-        if(!test) {
+        if (!match(query)) {
             return null;
         } else {
             return Boolean.TRUE;
         }
     }
-
 }

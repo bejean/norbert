@@ -48,12 +48,12 @@ class RulesEngine {
         this.rules = new ArrayList();
     }
 
-    public void allowPath(String path) {
-        add( new AllowedRule(path) );
+    public void allowPath(String path, boolean wildcardsAllowed) {
+        add( new AllowedRule(path, wildcardsAllowed) );
     }
 
-    public void disallowPath(String path) {
-        add( new DisallowedRule(path) );
+    public void disallowPath(String path, boolean wildcardsAllowed) {
+        add( new DisallowedRule(path, wildcardsAllowed) );
     }
 
     public void add(Rule rule) {
