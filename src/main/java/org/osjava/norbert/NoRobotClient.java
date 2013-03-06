@@ -206,12 +206,12 @@ public class NoRobotClient {
                     if(parsingAllowBlock) {
                         if(lineToLowerCase.startsWith("allow:")) {
                             value = line.substring("Allow:".length()).trim();
-                            value = URLDecoder.decode(value);
+                            value = URLDecoder.decode(value, "UTF-8");
                             engine.allowPath( value, wildcardsAllowed );
                         } else 
                             if(lineToLowerCase.startsWith("disallow:")) {
                                 value = line.substring("Disallow:".length()).trim();
-                                value = URLDecoder.decode(value);
+                                value = URLDecoder.decode(value, "UTF-8");
                                 engine.disallowPath( value, wildcardsAllowed );
                             } else {
                                 // ignore
@@ -272,14 +272,15 @@ public class NoRobotClient {
         try
         {
             urlStr = url.toExternalForm().substring( this.baseUrl.toExternalForm().length() - 1);
+            if("/robots.txt".equals(urlStr)) {
+                return true;
+            }
+            urlStr = URLDecoder.decode( urlStr, "UTF-8" );
         }
         catch(Exception e) {
+            //e.printStackTrace();
             return true;
         }
-        if("/robots.txt".equals(urlStr)) {
-            return true;
-        }
-        urlStr = URLDecoder.decode( urlStr );
         Boolean allowed = this.rules.isAllowed( urlStr );
         if(allowed == null) {
             allowed = this.wildcardRules.isAllowed( urlStr );
