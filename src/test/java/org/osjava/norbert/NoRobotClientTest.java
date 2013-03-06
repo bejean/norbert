@@ -39,7 +39,7 @@ import java.net.MalformedURLException;
 
 public class NoRobotClientTest extends TestCase {
 
-    private String hardCode = "file://"+new File("data/").getAbsoluteFile()+"/";
+    private String hardCode = "file:///"+new File("data/").getAbsoluteFile()+"/";
 
     public NoRobotClientTest(String name) {
         super(name);
