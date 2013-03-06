@@ -200,12 +200,12 @@ public class NoRobotClient {
                     if(parsingAllowBlock) {
                         if(lineToLowerCase.startsWith("allow:")) {
                             value = line.substring("Allow:".length()).trim();
-                            value = URLDecoder.decode(value);
+                            value = URLDecoder.decode(value, "UTF-8");
                             engine.allowPath( value );
                         } else 
                             if(lineToLowerCase.startsWith("disallow:")) {
                                 value = line.substring("Disallow:".length()).trim();
-                                value = URLDecoder.decode(value);
+                                value = URLDecoder.decode(value, "UTF-8");
                                 engine.disallowPath( value );
                             } else {
                                 // ignore
