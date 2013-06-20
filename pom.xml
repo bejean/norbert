@@ -3,32 +3,32 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.osjava.norbert</groupId>
 	<artifactId>norbert</artifactId>
-    <version>0.3.2</version>
+	<version>0.3.2</version>
 	<name>norbert</name>
 	<packaging>jar</packaging>
 	<!-- Must be kept in sync with "version" value in build.properties -->
 	<url></url>
-    <description>A handler for robots.txt, as described in http://www.robotstxt.org/wc/norobots-rfc.html.</description>
-  <developers>
-    <developer>
-      <id>hen</id>
-      <name>Henri Yandell</name>
-      <email>bayard@generationjava.com</email>
-      <organization>GenerationJava</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>dom</id>
-      <name>Dominique Béjean</name>
-      <email>contact@eolya.fr</email>
-      <organization>Eolya</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-  </developers>
+	<description>A handler for robots.txt, as described in http://www.robotstxt.org/wc/norobots-rfc.html.</description>
+	<developers>
+		<developer>
+			<id>hen</id>
+			<name>Henri Yandell</name>
+			<email>bayard@generationjava.com</email>
+			<organization>GenerationJava</organization>
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>dom</id>
+			<name>Dominique Béjean</name>
+			<email>contact@eolya.fr</email>
+			<organization>Eolya</organization>
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+	</developers>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -40,4 +40,36 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<altDeploymentRepository>
+						release-repo::default::file:/Data/Projects/Eolya-Maven-Repo/releases
+					</altDeploymentRepository>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.google.code.maven-svn-wagon</groupId>
+						<artifactId>maven-svn-wagon</artifactId>
+						<version>1.4</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<fork>true</fork>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
